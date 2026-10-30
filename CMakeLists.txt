@@ -15,7 +15,8 @@ elseif(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/../XboxXBE-Recomp/cmake/XbeRecomp.cmak
     set(SDK ${CMAKE_CURRENT_SOURCE_DIR}/../XboxXBE-Recomp)
 else()
     include(FetchContent)
-    FetchContent_Declare(xbe_sdk GIT_REPOSITORY https://github.com/TGP482/XboxXBE-Recomp.git GIT_TAG main)
+    # the fork with keyboard support; the sdk/ submodule points to it too
+    FetchContent_Declare(xbe_sdk GIT_REPOSITORY https://github.com/ikeenx2007-ui/XboxXBERecomp.git GIT_TAG main)
     FetchContent_MakeAvailable(xbe_sdk)
     set(SDK ${xbe_sdk_SOURCE_DIR})
 endif()
