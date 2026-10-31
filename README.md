@@ -15,13 +15,36 @@ This port was created using the [Xbox XBE Recomp](https://github.com/TGP482/Xbox
 
 Other versions (PAL, PlayStation 2, GameCube) are not supported.
 
+### Checking your copy
+The executable only runs the exact `default.xbe` it was built from. Each release lists the SHA-1 it expects. To see yours, open a terminal in the folder with your `default.xbe` and run:
+
+```
+certutil -hashfile default.xbe SHA1
+```
+
+If the number differs from the one in the release, the game shows a message about another release: you have a different version of the game. You can still build the port yourself from your own copy (see [Building](#building)).
+
+## System requirements
+
+- Windows 10 64-bit or newer
+- A GPU with Direct3D 12 support
+- About 3 to 5 GB of free disk space (the game, the bundled compiler and the first start's build)
+
 ## Installation
 
 1. Download the latest `DBZSagas.zip` from [Releases](https://github.com/ikeenx2007-ui/DBZSagasRecomp/releases) and extract it.
-2. Dump your own copy of the game and copy `default.xbe` and the `data_xbox` folder into the `assets` folder.
-3. Run `DBZSagas.exe`. The first start compiles the game's code for your PC. It takes a while (30 to 90 minutes depending on your CPU) and only happens once.
+2. Put your game in the `assets` folder, in one of these two ways:
+   - **The disc image**: your own dump of the disc as an `.iso` file.
+   - **The extracted files**: `default.xbe` and the `data_xbox` folder, directly inside `assets` (no folder in between).
+3. Run `DBZSagas.exe`.
+
+The first start compiles the game's code for your PC, with the compiler in the `compiler` folder. It takes a while (30 to 90 minutes depending on your CPU) and only happens once. **Do not close the window while it works.**
 
 Recomp settings can be adjusted in `settings.toml` beside the exe.
+
+### Getting the game files from your disc
+- **From a modded Xbox**: copy the game's folder from the console over FTP, then take `default.xbe` and `data_xbox` from it.
+- **From an ISO of your own disc**: put the `.iso` in `assets` as it is, or extract it with a tool such as [extract-xiso](https://github.com/XboxDev/extract-xiso) and copy `default.xbe` and `data_xbox`.
 
 ## Controls
 
@@ -47,27 +70,32 @@ The keyboard works as controller 1, so the game can be played without a controll
 
 Keys can be changed in `controls.ini`, created beside the exe on the first start. Several keys can be given for one button, separated by commas (`A = K, Space`). The file also sets which controller port the keyboard drives and whether it only works while the game window is in front.
 
-## System requirements
+## Troubleshooting
 
-- Windows 10 64-bit or newer
-- A GPU with Direct3D 12 support
+- **A message about another release**: your `default.xbe` is not the version this release was built from. See [Checking your copy](#checking-your-copy).
+- **The game asks for the game files**: `assets` must hold the `.iso`, or `default.xbe` with `data_xbox` beside it, not inside another folder.
+- **The first start was closed halfway**: run `DBZSagas.exe` again, it carries on.
+- **The game closes or freezes**: the log is in the `logs` folder beside the exe, and a crash leaves a file in `CrashDumps`. Attach both when you report the problem in [Issues](https://github.com/ikeenx2007-ui/DBZSagasRecomp/issues).
 
 ## Building
 
-### 1. Clone the repository
-Clone this repository with [Git](https://git-scm.com/), including the SDK submodule:
+### 1. Install the dependencies
+- [Git](https://git-scm.com/download/win)
+- Visual Studio 2022 with **Desktop development with C++**, **C++ Clang tools for Windows** and **C++ CMake tools for Windows** (`build.bat` offers to add the last two)
+- [7-Zip](https://www.7-zip.org/), only to build the release package
+- About 5 GB of free disk space
+
+### 2. Clone the repository
+Clone this repository with its SDK submodule:
 
 ```
 git clone --recurse-submodules https://github.com/ikeenx2007-ui/DBZSagasRecomp.git
 ```
 
-The `sdk` folder is a [fork of Xbox XBE Recomp](https://github.com/ikeenx2007-ui/XboxXBERecomp) that adds keyboard support.
+The `sdk` folder is a [fork of Xbox XBE Recomp](https://github.com/ikeenx2007-ui/XboxXBERecomp) that adds keyboard support. A copy downloaded as a ZIP has no `sdk` folder: the build downloads the fork by itself.
 
-### 2. Add the game files
+### 3. Add the game files
 Copy `default.xbe` and the `data_xbox` folder from your own copy of the game into the `assets` folder.
-
-### 3. Install the dependencies
-Install Visual Studio 2022 with **Desktop development with C++**, **C++ Clang tools for Windows** and **C++ CMake tools for Windows** (`build.bat` offers to add the last two). Building the release package also needs [7-Zip](https://www.7-zip.org/).
 
 ### 4. Build
 Run `build.bat`. The first build recompiles the game and takes a while. The exe is written to `out\build\release`.
